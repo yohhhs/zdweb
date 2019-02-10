@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>征订订单管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/desk.css">
+</head>
+<body>
+<div id="app">
+    <div class="gift-list-wrapper">
+        <p v-if="orderList.length === 0" style="text-align: center;line-height: 50px">没有相关订单</p>
+        <div class="wrapper">
+            <ul class="gift-list">
+                <li v-for="item in orderList" class="list-item">
+                    <p class="gift-title">{{item.goodsName}}</p>
+                    <p class="gift-on">订单编号：{{item.purchaseOrderNumber}}</p>
+                    <p class="gift-number">商品数量：<span class="number">{{item.goodsCount}}</span>盒</p>
+                    <!--<button v-if="item.orderState == 3" class="confirm-btn" @click="receiveConfirm(item.purchaseOrderId)">确认收货</button>-->
+                    <p class="time">下单时间：{{item.createTimeStr}}</p>
+                </li>
+                <div class="footer-text" v-if="isLoading">正在加载...</div>
+                <div class="footer-text" v-if="noMore">没有更多数据了</div>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="./assets/jquery-3.3.1.min.js"></script>
+<script src="./assets/vue.js"></script>
+<script src="./assets/layer.js"></script>
+<script src="./assets/better-scroll.js"></script>
+<script src="js/desk.js"></script>
+</body>
+</html>
