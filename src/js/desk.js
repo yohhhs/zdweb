@@ -1,4 +1,4 @@
-var URL = 'https://www.topasst.com/web'
+var URL = 'https://www.topasst.com/solicitWeb'
 new Vue({
     el: '#app',
     data: {
@@ -19,72 +19,56 @@ new Vue({
         noMore: false,
         pageNo: 1,
         scroll: null,
-        countData: {
-            haveBuyMemberCount: 0,
-            toMonthSaleMoney: 0,
-            toWeekSaleMoney: 0,
-            toYearSaleMoney: 0
-        }
+        appId: 'wx69b650de9b396418',
+        secret: 'f29819794a1574af4c2057413215f567',
+        memberId: ''
     },
     created: function () {
-        this.token = window.sessionStorage.getItem('token')
-        if (!this.token) {
-            window.location.href = "./index.html"
+        var self = this
+        if (this.GetQueryString('code')) {
+            $.get('https://api.weixin.qq.com/sns/oauth2/access_token', {
+                appid: self.appId,
+                secret:  self.secret,
+                code: self.GetQueryString('code'),
+                grant_type: 'authorization_code'
+            }, function (result) {
+                $.post('https://www.topasst.com/solicitWeb/wechat/getMemberIdByOpenId', {
+                    openId: JSON.parse(result).openid
+                }, function (result) {
+                    if (result.statusCode === 200) {
+                        self.memberId = result.data.memberId
+                        self.getOrderList()
+                    }
+                })
+            })
         } else {
-            this.getOrderList()
-            this.getAreaList()
-            this.getCount()
+            window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?'
+                + 'appid='+ this.appId +'&redirect_uri='
+                + encodeURIComponent(window.location.href)
+                + '&response_type=code'
+                + '&scope=snsapi_base'
+                + '&state=1#wechat_redirect'
         }
     },
     methods: {
-        changeArea: function (index) {
-            if (this.scroll) {
-                this.scroll.openPullUp()
-                this.scroll.scrollTo(0, 0)
-            }
-            if (this.addressCode === this.areaList[index].addressCode) {
-                this.currentIndex = -1;
-                this.addressCode = '';
-                this.agentMemberName = '所有区域';
+        GetQueryString: function (name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+            var r = window.location.search.substr(1).match(reg)
+            if (r != null) {
+                return r[2]
             } else {
-                this.currentIndex = index;
-                this.addressCode = this.areaList[index].addressCode;
-                this.agentMemberName = this.areaList[index].addressName;
+                return null
             }
-            this.pageNo = 1;
-            this.isLoading = false;
-            this.noMore = false;
-            this.getOrderList();
-            this.clickMask()
-        },
-        getCount: function () {
-            var vm = this
-            $.post(URL + '/managerMember/getManagerMemberData', {
-                managerMemberId: vm.token
-            }, function (res) {
-                if (res.statusCode === 200) {
-                    vm.countData = res.data
-                }
-            })
-        },
-        getAreaList: function () {
-            var vm = this
-            $.post(URL + '/managerMember/getManagerMemberAreaList', {
-                managerMemberId: vm.token
-            }, function (res) {
-                if (res.statusCode === 200) {
-                    vm.areaList = res.data
-                }
-            })
         },
         getOrderList: function () {
             var vm = this
-            $.post(URL + '/managerMember/getManagerMemberOrderList', {
-                managerMemberId: vm.token,
-                addressCode: vm.addressCode,
+            $.post(URL + '/purchaseOrder/getPurchaseOrderList', {
+                memberId: vm.memberId,
+                orderState: 1,
                 pageNo: vm.pageNo,
                 pageSize: 10
             }, function (res) {
+                console.log(res)
                 if (res.statusCode === 200) {
                     vm.orderList = res.data.list
                     vm.pageNo++
@@ -113,9 +97,9 @@ new Vue({
         },
         getMoreList: function () {
             var vm = this
-            $.post(URL + '/managerMember/getManagerMemberOrderList', {
-                managerMemberId: vm.token,
-                addressCode: vm.addressCode,
+            $.post(URL + '/purchaseOrder/getPurchaseOrderList', {
+                memberId: vm.memberId,
+                orderState: 1,
                 pageNo: vm.pageNo,
                 pageSize: 10
             }, function (res) {
@@ -139,15 +123,6 @@ new Vue({
         },
         clickMask: function () {
             this.showInfo = false
-        },
-        loginOut: function () {
-            window.sessionStorage.clear()
-            window.location.href = "./index.html"
-        },
-        changeStatus: function (n) {
-            this.agentMemberName = '请选择所属区域'
-            this.status = n
-            this.getOrderList()
         }
     }
 })
