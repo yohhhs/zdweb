@@ -21,7 +21,9 @@ new Vue({
         scroll: null,
         appId: 'wx69b650de9b396418',
         secret: 'f29819794a1574af4c2057413215f567',
-        memberId: ''
+        memberId: '',
+        currentDetail: null,
+        isWrite: false
     },
     created: function () {
         var self = this
@@ -68,7 +70,6 @@ new Vue({
                 pageNo: vm.pageNo,
                 pageSize: 10
             }, function (res) {
-                console.log(res)
                 if (res.statusCode === 200) {
                     vm.orderList = res.data.list
                     vm.pageNo++
@@ -82,7 +83,8 @@ new Vue({
                         let options = {
                             pullUpLoad: {
                                 threshold: 50
-                            }
+                            },
+                            click: true
                         }
                         vm.$nextTick(function () {
                             vm.scroll = new BScroll('.wrapper', options)
@@ -115,6 +117,100 @@ new Vue({
                         vm.scroll.finishPullUp()
                         vm.scroll.refresh()
                     }
+                }
+            })
+        },
+        itemHandles: function (index) {
+            console.log(index)
+            var vm = this
+            this.currentDetail = JSON.parse(JSON.stringify(vm.orderList[index]))
+            this.currentIndex = index
+            this.isWrite = true
+        },
+        updateConfirm: function () {
+            var vm = this
+            if (vm.currentDetail.name === '') {
+                layer.open({
+                    content: '请输入姓名',
+                    btn: '我知道了'
+                });
+                return
+            }
+            if (vm.currentDetail.mobile === '') {
+                layer.open({
+                    content: '请输入电话',
+                    btn: '我知道了'
+                });
+                return
+            }
+            if (vm.currentDetail.goodsCount === '') {
+                layer.open({
+                    content: '请输入产品数量',
+                    btn: '我知道了'
+                });
+                return
+            }
+            if (vm.currentDetail.addressDetail === '') {
+                layer.open({
+                    content: '请输入所属区域',
+                    btn: '我知道了'
+                });
+                return
+            }
+            $.post('https://www.topasst.com/solicitWeb/purchaseOrder/updatePurchaseOrder', {
+                memberId: vm.memberId,
+                purchaseOrderId: vm.currentDetail.purchaseOrderId,
+                goodsCount: vm.currentDetail.goodsCount,
+                addressDetail: vm.currentDetail.addressDetail,
+                name: vm.currentDetail.name,
+                mobile:  vm.currentDetail.mobile
+            }, function (result) {
+                if (result.statusCode === 200) {
+                    console.log(vm.orderList[vm.currentIndex])
+                    console.log(vm.currentDetail)
+                    vm.orderList[vm.currentIndex].goodsCount = vm.currentDetail.goodsCount
+                    vm.orderList[vm.currentIndex].addressDetail = vm.currentDetail.addressDetail
+                    vm.orderList[vm.currentIndex].name = vm.currentDetail.name
+                    vm.orderList[vm.currentIndex].mobile = vm.currentDetail.mobile
+                    vm.$nextTick(function () {
+                        layer.open({
+                            content: '修改成功',
+                            btn: '确定'
+                        });
+                        this.isWrite = false
+                    })
+
+                } else {
+                    layer.open({
+                        content: result.msg,
+                        btn: '我知道了'
+                    });
+                }
+            })
+        },
+        pageBack: function () {
+            this.isWrite = false
+        },
+        cancel: function () {
+            var vm = this
+            $.post('https://www.topasst.com/solicitWeb/purchaseOrder/cancelPurchaseOrder', {
+                memberId: vm.memberId,
+                purchaseOrderId: vm.currentDetail.purchaseOrderId
+            }, function (result) {
+                if (result.statusCode === 200) {
+                    vm.orderList.splice(vm.currentIndex, 1)
+                    vm.$nextTick(function () {
+                        layer.open({
+                            content: '取消成功',
+                            btn: '确定'
+                        });
+                        this.isWrite = false
+                    })
+                } else {
+                    layer.open({
+                        content: result.msg,
+                        btn: '我知道了'
+                    });
                 }
             })
         },

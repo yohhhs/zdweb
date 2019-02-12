@@ -6,7 +6,7 @@ var memberId = ''
 if (!CODE) {
     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?'
         + 'appid='+ appId +'&redirect_uri='
-        + encodeURIComponent(url)
+        + url
         + '&response_type=code'
         + '&scope=snsapi_base'
         + '&state=1#wechat_redirect'
@@ -59,6 +59,20 @@ function addInfo (memberId) {
         });
         return
     }
+    if (name === '') {
+        layer.open({
+            content: '请输入姓名',
+            btn: '我知道了'
+        });
+        return
+    }
+    if (tel === '') {
+        layer.open({
+            content: '请输入电话',
+            btn: '我知道了'
+        });
+        return
+    }
     if (number === '') {
         layer.open({
             content: '请输入产品数量',
@@ -73,21 +87,6 @@ function addInfo (memberId) {
         });
         return
     }
-    if (tel === '') {
-        layer.open({
-            content: '请输入电话',
-            btn: '我知道了'
-        });
-        return
-    }
-    if (name === '') {
-        layer.open({
-            content: '请输入姓名',
-            btn: '我知道了'
-        });
-        return
-    }
-    console.log(1111)
     $.post('https://www.topasst.com/solicitWeb/purchaseOrder/addPurchaseOrder', {
         memberId: memberId,
         inviteCode: code,
@@ -96,8 +95,16 @@ function addInfo (memberId) {
         name: name,
         mobile:  tel
     }, function (result) {
-        console.log(result)
         if (result.statusCode === 200) {
+            $('#code').val('')
+            $('#number').val('')
+            $('#area').val('')
+            $('#tel').val('')
+            $('#name').val('')
+            layer.open({
+                content: '录入成功',
+                btn: '确定'
+            });
         } else {
             layer.open({
                 content: result.msg,

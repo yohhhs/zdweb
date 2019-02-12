@@ -45,7 +45,7 @@
   line-height: 40px;
   font-size: 14px;
   background-color: #fff;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid #dbdbdb;
 }
 .arrow-icon {
   position: absolute;
@@ -136,30 +136,23 @@
   }
 }
 .gift-list {
-  font-size: 11px;
-  color: #666;
+  font-size: 14px;
+  color: #333;
   background-color: #fff;
   .list-item {
     padding: 11px;
     position: relative;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #dbdbdb;
   }
   .gift-title {
     margin-bottom: 10px;
-    font-size: 13px;
-    color: #333;
+    font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .gift-on {
-    margin-bottom: 6px;
-  }
-  .people {
-    margin-bottom: 6px;
-  }
-  .number {
-    color: #e84646;
+    margin-bottom: 10px;
   }
   .confirm-btn {
     position: absolute;
@@ -248,4 +241,15 @@
   height: 44px;
   line-height: 44px;
   text-align: center;
+}
+.btn-wrapper {
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.login-btn {
+  width: 95px;
+  height: 40px;
+  font-size: 14px;
+  border-radius: 2px;
 }

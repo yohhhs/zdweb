@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>征订订单管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/desk.css">
 </head>
 <body>
@@ -12,16 +13,34 @@
         <p v-if="orderList.length === 0" style="text-align: center;line-height: 50px">没有相关数据</p>
         <div class="wrapper">
             <ul class="gift-list">
-                <li v-for="item in orderList" class="list-item">
-                    <p class="gift-title">{{item.goodsName}}</p>
-                    <p class="gift-on">订单编号：{{item.purchaseOrderNumber}}</p>
-                    <p class="gift-number">商品数量：<span class="number">{{item.goodsCount}}</span>盒</p>
-                    <!--<button v-if="item.orderState == 3" class="confirm-btn" @click="receiveConfirm(item.purchaseOrderId)">确认收货</button>-->
-                    <p class="time">下单时间：{{item.createTimeStr}}</p>
+                <li v-for="(item, index) in orderList" class="list-item" @click="itemHandles(index)">
+                    <div class="gift-title">
+                        <span style="display: inline-block;width: 150px">邀请码：<span style="color: #44b549">{{item.inviteCode}}</span></span>
+                        <span>数量：{{item.goodsCount}}</span>
+                        <span v-if="item.orderState === 1" style="float: right;color: #ec9934">进行中</span>
+                        <span v-if="item.orderState === 3" style="float: right;color: #44b549">已完成</span>
+                    </div>
+                    <p class="gift-on">
+                        <span style="display: inline-block;width: 50px">{{item.name}}</span>
+                        <span>{{item.mobile}}</span>
+                    </p>
+                    <p class="gift-number">{{item.addressDetail}}</p>
                 </li>
                 <div class="footer-text" v-if="isLoading">正在加载...</div>
                 <div class="footer-text" v-if="noMore">没有更多数据了</div>
             </ul>
+        </div>
+        <div v-if="isWrite" class="container" style="z-index: 9999">
+            <input v-model="currentDetail.inviteCode" class="input-item" type="text" disabled placeholder="请输入邀请码">
+            <input v-model="currentDetail.name" class="input-item" type="text" placeholder="请输入姓名">
+            <input v-model="currentDetail.mobile" class="input-item" type="number" placeholder="请输入电话">
+            <input v-model="currentDetail.goodsCount" class="input-item" type="number" placeholder="请输入产品数量">
+            <input v-model="currentDetail.addressDetail" class="input-item" type="text" placeholder="请输入所属区域">
+            <div class="btn-wrapper">
+                <button v-if="currentDetail.orderState === 1" class="login-btn" @click="updateConfirm">确认修改</button>
+                <button v-if="currentDetail.orderState === 1" class="login-btn" @click="cancel">取消征订</button>
+                <button class="login-btn" @click="pageBack">返回</button>
+            </div>
         </div>
     </div>
 </div>

@@ -7,7 +7,8 @@
   top: 0;
   right: 0;
   bottom: 0;
-  background: url("../img/bg.png") no-repeat center / 100% 100%;
+  padding-top: 40px;
+  background-color: #fff;
 }
 .logo {
   display: block;
@@ -31,21 +32,19 @@
   width: 314px;
   height: 44px;
   font-size: 14px;
-  border: 1px solid rgba(150,150,150,0.7);
+  border: 1px solid rgba(150,150,150,0.3);
   border-radius: 5px;
   outline: none;
 }
 .login-btn {
   display: block;
-  margin: 40px auto 0;
+  margin: 0 auto;
   width: 314px;
   height: 44px;
   font-size: 16px;
   text-align: center;
   color: #fff;
-  background-image: linear-gradient(130deg,
-          #edae27 0%,
-          #ec883f 100%);
+  background-color: #44b549;
   border-radius: 5px;
   outline: none;
   border: none;
