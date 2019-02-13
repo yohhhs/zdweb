@@ -1,5 +1,5 @@
-var appId = 'wx69b650de9b396418'
-var secret = 'f29819794a1574af4c2057413215f567'
+var appId = 'wx862c127573da3930'
+var secret = '819e0af7cf45dc5a1a0b9701788f84b8'
 var url = window.location.href
 var CODE = GetQueryString('code')
 var memberId = ''

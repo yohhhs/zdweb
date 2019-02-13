@@ -19,8 +19,8 @@ new Vue({
         noMore: false,
         pageNo: 1,
         scroll: null,
-        appId: 'wx69b650de9b396418',
-        secret: 'f29819794a1574af4c2057413215f567',
+        appId: 'wx862c127573da3930',
+        secret: '819e0af7cf45dc5a1a0b9701788f84b8',
         memberId: '',
         currentDetail: null,
         isWrite: false
