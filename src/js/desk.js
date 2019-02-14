@@ -28,20 +28,13 @@ new Vue({
     created: function () {
         var self = this
         if (this.GetQueryString('code')) {
-            $.get('https://api.weixin.qq.com/sns/oauth2/access_token', {
-                appid: self.appId,
-                secret:  self.secret,
-                code: self.GetQueryString('code'),
-                grant_type: 'authorization_code'
+            $.post('https://www.topasst.com/solicitWeb/wechat/registerByCode', {
+                loginCode: self.GetQueryString('code')
             }, function (result) {
-                $.post('https://www.topasst.com/solicitWeb/wechat/getMemberIdByOpenId', {
-                    openId: JSON.parse(result).openid
-                }, function (result) {
-                    if (result.statusCode === 200) {
-                        self.memberId = result.data.memberId
-                        self.getOrderList()
-                    }
-                })
+                if (result.statusCode === 200) {
+                    self.memberId = result.data.memberId
+                    self.getOrderList()
+                }
             })
         } else {
             window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?'

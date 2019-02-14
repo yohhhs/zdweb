@@ -1,7 +1,7 @@
-// var appId = 'wx862c127573da3930'
-// var secret = '819e0af7cf45dc5a1a0b9701788f84b8'
-var appId = 'wx69b650de9b396418'
-var secret = 'f29819794a1574af4c2057413215f567'
+var appId = 'wx862c127573da3930'
+var secret = '819e0af7cf45dc5a1a0b9701788f84b8'
+// var appId = 'wx69b650de9b396418'
+// var secret = 'f29819794a1574af4c2057413215f567'
 var url = window.location.href
 var CODE = GetQueryString('code')
 var memberId = ''
@@ -31,14 +31,11 @@ $('#loginBtn').click(function() {
         $.post('https://www.topasst.com/solicitWeb/wechat/registerByCode', {
             loginCode: CODE
         }, function (result) {
-            $.post('https://www.topasst.com/solicitWeb/wechat/getMemberIdByOpenId', {
-                openId: result.data.openid
-            }, function (result) {
-                if (result.statusCode === 200) {
-                    memberId = result.data.memberId
-                    addInfo(memberId)
-                }
-            })
+            if (result.statusCode === 200) {
+                console.log(result.data.memberId)
+                memberId = result.data.memberId
+                addInfo(memberId)
+            }
         })
     } else {
         addInfo(memberId)
