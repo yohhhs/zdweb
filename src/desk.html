@@ -35,7 +35,7 @@
             <input v-model="currentDetail.name" class="input-item" type="text" placeholder="请输入姓名">
             <input v-model="currentDetail.mobile" class="input-item" type="number" placeholder="请输入电话">
             <input v-model="currentDetail.goodsCount" class="input-item" type="number" placeholder="请输入产品数量">
-            <input v-model="currentDetail.addressDetail" class="input-item" type="text" placeholder="请输入所属区域">
+            <input v-model="currentDetail.addressDetail" class="input-item" type="text" placeholder="请输入所属区部">
             <div class="btn-wrapper">
                 <button v-if="currentDetail.orderState === 1" class="login-btn" @click="updateConfirm">确认修改</button>
                 <button v-if="currentDetail.orderState === 1" class="login-btn" @click="cancel">取消征订</button>
