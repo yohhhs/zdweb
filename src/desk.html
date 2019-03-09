@@ -30,15 +30,16 @@
                 <li v-for="(item, index) in orderList" class="list-item" @click="itemHandles(index)">
                     <div class="gift-title">
                         <span>邀请码：{{item.inviteCode}}</span>
-                        <span v-if="item.orderState === 1" style="float: right;color: #ec9934">进行中</span>
-                        <span v-if="item.orderState === 3" style="float: right;color: #44b549">已完成</span>
+                        <span v-if="item.orderState === 1 && item.solicitState === 2" style="float: right;color: #ec9934">进行中</span>
+                        <span v-if="item.orderState === 1 && item.solicitState === 3" style="float: right;color: #44b549">已完成</span>
+                        <span v-if="item.orderState === 9" style="float: right;color: #FD482C">已取消</span>
                     </div>
                     <p style="margin-bottom: 10px;">{{item.goodsName}}</p>
                     <p class="gift-on">
                         <span style="display: inline-block;width: 100px">数<span style="display: inline-block;width: 13px"></span>量：{{item.goodsCount}}</span>
                         <span>{{item.createTimeStr}}</span>
-                        <span v-if="item.orderState === 1" style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看及修改</span>
-                        <span v-if="item.orderState === 3" style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看</span>
+                        <span v-if="item.orderState === 1 && item.solicitState === 2" style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看及修改</span>
+                        <span v-else style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看</span>
                     </p>
                     <!--<p class="gift-number">{{item.addressDetail}}</p>-->
                 </li>
@@ -54,8 +55,8 @@
             <input v-model="currentDetail.goodsCount" class="input-item" type="number" placeholder="请输入产品数量">
             <input v-model="currentDetail.addressDetail" class="input-item" type="text" placeholder="请输入所属区部">
             <div class="btn-wrapper">
-                <button v-if="currentDetail.orderState === 1" class="login-btn" @click="updateConfirm">确认修改</button>
-                <button v-if="currentDetail.orderState === 1" class="login-btn" @click="cancel">取消征订</button>
+                <button v-if="currentDetail.orderState === 1 && currentDetail.solicitState === 2" class="login-btn" @click="updateConfirm">确认修改</button>
+                <button v-if="currentDetail.orderState === 1 && currentDetail.solicitState === 2" class="login-btn" @click="cancel">取消征订</button>
                 <button class="login-btn" @click="pageBack">返回</button>
             </div>
         </div>

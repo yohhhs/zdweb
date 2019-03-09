@@ -114,6 +114,7 @@ function addInfo (memberId) {
         if (result.statusCode === 200) {
             $('#code').val('')
             $('#number').val('')
+            $('#goodsName').val('')
             $('#area').val('')
             $('#tel').val('')
             $('#name').val('')
