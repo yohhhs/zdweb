@@ -59,7 +59,6 @@ new Vue({
             var vm = this
             $.post(URL + '/purchaseOrder/getPurchaseOrderList', {
                 memberId: vm.memberId,
-                orderState: 1,
                 pageNo: vm.pageNo,
                 pageSize: 10
             }, function (res) {
@@ -94,7 +93,6 @@ new Vue({
             var vm = this
             $.post(URL + '/purchaseOrder/getPurchaseOrderList', {
                 memberId: vm.memberId,
-                orderState: 1,
                 pageNo: vm.pageNo,
                 pageSize: 10
             }, function (res) {

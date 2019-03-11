@@ -17,6 +17,26 @@ if (!CODE) {
 
 
 }
+var timer = null
+$('#code').on('input', function () {
+    if (timer) {
+        clearTimeout(timer)
+        timer = setTimeout(getGoodsName, 1000)
+    } else {
+        timer = setTimeout(getGoodsName, 1000)
+    }
+})
+function getGoodsName () {
+    $.post('https://www.topasst.com/solicitWeb/purchaseOrder/getSolicitGoodsByInviteCode', {
+        inviteCode: $('#code').val()
+    }, function (result) {
+        if (result.statusCode === 200) {
+            $('#goodsName').val(result.data.name)
+        } else {
+            $('#goodsName').val('未找到相关产品')
+        }
+    })
+}
 function GetQueryString(name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
     var r = window.location.search.substr(1).match(reg)
@@ -94,11 +114,12 @@ function addInfo (memberId) {
         if (result.statusCode === 200) {
             $('#code').val('')
             $('#number').val('')
+            $('#goodsName').val('')
             $('#area').val('')
             $('#tel').val('')
             $('#name').val('')
             layer.open({
-                content: '录入成功',
+                content: '征订订单提交成功，您可在”订单管理”查询及修改',
                 btn: '确定'
             });
         } else {
