@@ -27,7 +27,28 @@
                 <!--</li>-->
             <!--</ul>-->
             <ul class="gift-list">
-                <li v-for="(item, index) in orderList" class="list-item" @click="itemHandles(index)">
+                <li>
+                    <div class="list-item">
+                        <p class="item-date">创建日期：1029299</p>
+                        <p class="item-status">订单进行中</p>
+                    </div>
+                    <div class="item-content">
+                        <div class="img-wrapper">
+                            <img src="" alt="">
+                        </div>
+                        <p class="order-name">太平沉香</p>
+                        <p class="order-number">数量：22盒</p>
+                        <div>
+                            <p class="tip">征订结束时间：</p>
+                            <div class="item-btn">修改订单</div>
+                        </div>
+                        <div>
+                            <p class="tip">征订已结束</p>
+                            <p class="tip">如需帮助，请咨询内勤</p>
+                        </div>
+                    </div>
+                </li>
+                <!--<li v-for="(item, index) in orderList" class="list-item" @click="itemHandles(index)">
                     <div class="gift-title">
                         <span>邀请码：{{item.inviteCode}}</span>
                         <span v-if="item.orderState === 1 && item.solicitState === 2" style="float: right;color: #ec9934">进行中</span>
@@ -41,10 +62,10 @@
                         <span v-if="item.orderState === 1 && item.solicitState === 2" style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看及修改</span>
                         <span v-else style="float: right;margin-top:-6px;padding: 5px 12px;border: 1px solid #44b549;color:#44b549;border-radius: 2px;vertical-align: 3px">查看</span>
                     </p>
-                    <!--<p class="gift-number">{{item.addressDetail}}</p>-->
-                </li>
+                    &lt;!&ndash;<p class="gift-number">{{item.addressDetail}}</p>&ndash;&gt;
+                </li>-->
                 <div class="footer-text" v-if="isLoading">正在加载...</div>
-                <div class="footer-text" v-if="noMore">没有更多数据了</div>
+                <div class="footer-text" v-if="noMore">无更多订单</div>
             </ul>
         </div>
         <div v-if="isWrite" class="container" style="z-index: 9999">
