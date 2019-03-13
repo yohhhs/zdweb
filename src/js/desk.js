@@ -2,15 +2,19 @@ var URL = 'https://www.topasst.com/solicitWeb'
 new Vue({
     el: '#app',
     data: {
-        showInfo: false,
-        token: '',
-        saleDptList: [],
-        buyGift: 0,
-        sendGift: 1,
-        transferCount: 0,
-        insideMemberName: '',
-        agentMemberName: '所有区域',
-        status: 3,
+        showSelect: false,
+        currentGoods: null,
+        selectList: [],
+        inviteCode: '',
+        questData: {
+            inviteCode: '',
+            goodsCount: 0,
+            saleDistrict: '',
+            department: '',
+            name: '',
+            mobile: ''
+        },
+        timer: null,
         orderList: [],
         addressCode: '',
         areaList: [],
@@ -23,7 +27,9 @@ new Vue({
         secret: '819e0af7cf45dc5a1a0b9701788f84b8',
         memberId: '',
         currentDetail: null,
-        isWrite: false
+        isWrite: false,
+        editMessage: false,
+        cancelMessage: false
     },
     created: function () {
         var self = this
@@ -46,6 +52,71 @@ new Vue({
         }
     },
     methods: {
+        getGoodsInfo: function () {
+            var vm = this
+            $.post(URL + '/purchaseOrder/getSolicitGoodsByInviteCode', {
+                inviteCode: vm.questData.inviteCode
+            }, function (res) {
+                if (res.statusCode === 200) {
+                    vm.selectList = res.data
+                    if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
+                        vm.currentGoods = res.data[0]
+                    }
+                }
+            })
+        },
+        openSelect: function () {
+            this.showSelect = true
+        },
+        chooseGoods: function (item) {
+            this.currentGoods = JSON.parse(JSON.stringify(item))
+        },
+        closeSelect: function () {
+            this.showSelect = false
+        },
+        delCount: function () {
+            if (this.questData.goodsCount > 0) {
+                this.questData.goodsCount--
+            }
+        },
+        addCount: function () {
+            this.questData.goodsCount++
+        },
+        addOrder: function () {
+            var vm = this
+            if (vm.questData.inviteCode === '') {
+                return alert('请输入邀请码')
+            }
+            if (vm.questData.saleDistrict === '') {
+                return alert('请输入营业区')
+            }
+            if (vm.questData.department === '') {
+                return alert('请输入部门')
+            }
+            if (vm.questData.name === '') {
+                return alert('请输入姓名')
+            }
+            if (vm.questData.mobile === '') {
+                return alert('请输入电话')
+            }
+            $.post(URL + '/purchaseOrder/addPurchaseOrder', {
+                memberId: vm.memberId,
+                inviteCode: vm.questData.inviteCode,
+                goodsCount: vm.questData.goodsCount,
+                saleDistrict: vm.questData.saleDistrict,
+                department: vm.questData.department,
+                name: vm.questData.name,
+                mobile: vm.questData.mobile,
+                solicitGoodsId: vm.currentGoods.solicitGoodsId
+            }, function (res) {
+                if (res.statusCode === 200) {
+                    vm.editMessage = true
+                    setTimeout(function(){
+                        vm.editMessage = false
+                    }, 1500)
+                }
+            })
+        },
         GetQueryString: function (name) {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
             var r = window.location.search.substr(1).match(reg)
@@ -111,12 +182,32 @@ new Vue({
                 }
             })
         },
-        itemHandles: function (index) {
-            console.log(index)
-            var vm = this
+        cancelOrder: function () {},
+        closeEdit: function () {
+            this.isWrite = false
+        },
+        changeOrder: function () {
             this.currentDetail = JSON.parse(JSON.stringify(vm.orderList[index]))
             this.currentIndex = index
             this.isWrite = true
+        },
+        getLastGoodsInfo: function () {
+            $.post(URL + '/purchaseOrder/getPurchaseOrderDetail', {
+                memberId: vm.memberId,
+                purchaseOrderId: this.currentDetail.purchaseOrderId
+            }, function (res) {
+                if (res.statusCode === 200) {
+                    for (var k in vm.questData) {
+                        vm.questData[k] = res.data[k]
+                    }
+                    this.selectList = res.data.solicitGoodsList
+                    res.data.solicitGoodsList.forEach(function(item) {
+                        if (item.solicitGoodsId === res.data.solicitGoodsId) {
+                            this.currentGoods = item
+                        }
+                    })
+                }
+            })
         },
         updateConfirm: function () {
             var vm = this
@@ -182,7 +273,7 @@ new Vue({
         pageBack: function () {
             this.isWrite = false
         },
-        cancel: function () {
+        cancelOrder: function () {
             var vm = this
             $.post('https://www.topasst.com/solicitWeb/purchaseOrder/cancelPurchaseOrder', {
                 memberId: vm.memberId,
@@ -190,13 +281,10 @@ new Vue({
             }, function (result) {
                 if (result.statusCode === 200) {
                     vm.orderList.splice(vm.currentIndex, 1)
-                    vm.$nextTick(function () {
-                        layer.open({
-                            content: '取消成功',
-                            btn: '确定'
-                        });
-                        this.isWrite = false
-                    })
+                    vm.cancelMessage = true
+                    setTimeout(function(){
+                        vm.cancelMessage = false
+                    }, 1500)
                 } else {
                     layer.open({
                         content: result.msg,
