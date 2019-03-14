@@ -19,10 +19,11 @@
     <div class="gift-list-wrapper">
         <div class="wrapper">
             <ul class="gift-list">
-                <li v-for="item in orderList" class="list-item">
-                    <div v-if="item.solicitState === 3" class="item-mask"></div>
+                <li v-for="(item, index) in orderList" class="list-item">
+                    <div v-if="item.solicitState === 3 || item.orderState === 9" class="item-mask"></div>
                     <div class="list-title">
                         <p class="item-date">创建日期：{{item.createTime}}</p>
+                        <p v-if="item.orderState === 9">订单已取消</p>
                         <p v-if="item.orderState === 1 && item.solicitState === 2" class="item-status1">订单进行中</p>
                         <p v-if="item.orderState === 1 && item.solicitState === 3" class="item-status2">订单已完成</p>
                     </div>
@@ -36,7 +37,7 @@
                             <p class="tip">征订结束时间：{{item.endTime}}</p>
                             <div class="item-btn" @click="changeOrder(index)">修改订单</div>
                         </div>
-                        <div>
+                        <div v-else>
                             <p class="tip">征订已结束</p>
                             <p class="tip">如需帮助，请咨询内勤</p>
                         </div>

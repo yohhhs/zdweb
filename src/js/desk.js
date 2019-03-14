@@ -187,7 +187,7 @@ new Vue({
             this.isWrite = false
         },
         changeOrder: function () {
-            this.currentDetail = JSON.parse(JSON.stringify(vm.orderList[index]))
+            this.currentDetail = JSON.parse(JSON.stringify(this.orderList[index]))
             this.currentIndex = index
             this.isWrite = true
         },

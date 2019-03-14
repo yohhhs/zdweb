@@ -55,6 +55,7 @@ new Vue({
     },
     methods: {
         getLastGoodsInfo: function () {
+            let vm = this
             $.post(URL + '/purchaseOrder/getPurchaseOrderDetail', {
                 memberId: vm.memberId
             }, function (res) {
@@ -62,10 +63,10 @@ new Vue({
                     for (var k in vm.questData) {
                         vm.questData[k] = res.data[k]
                     }
-                    this.selectList = res.data.solicitGoodsList
+                    vm.selectList = res.data.solicitGoodsList
                     res.data.solicitGoodsList.forEach(function(item) {
                         if (item.solicitGoodsId === res.data.solicitGoodsId) {
-                            this.currentGoods = item
+                            vm.currentGoods = item
                         }
                     })
                 }
