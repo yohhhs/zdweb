@@ -186,12 +186,14 @@ new Vue({
         closeEdit: function () {
             this.isWrite = false
         },
-        changeOrder: function () {
+        changeOrder: function (index) {
             this.currentDetail = JSON.parse(JSON.stringify(this.orderList[index]))
             this.currentIndex = index
+            this.getLastGoodsInfo()
             this.isWrite = true
         },
         getLastGoodsInfo: function () {
+            let vm = this
             $.post(URL + '/purchaseOrder/getPurchaseOrderDetail', {
                 memberId: vm.memberId,
                 purchaseOrderId: this.currentDetail.purchaseOrderId

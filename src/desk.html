@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>征订订单管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/desk.css">
     <link rel="stylesheet" href="css/edit.css">
     <link rel="stylesheet" href="css/message.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/desk.css">
     <style>
-        .confirm-btn {
-            width: 100px;
-        }
+
     </style>
 </head>
 <body>
@@ -136,9 +134,11 @@
             <input  v-model="questData.goodsCount" class="input-item" type="text">
             <img @click="addCount" class="number-handle add-btn" src="./img/add.png" alt="">
         </div>
-        <button class="confirm-btn" @click="addOrder">提交订单</button>
-        <button class="confirm-btn" style="background-color: #636363" @click="cancelOrder">一键取消</button>
-        <button class="confirm-btn" @click="closeEdit">返回</button>
+        <div class="btn-wrapper">
+            <button class="confirm-btn" @click="addOrder">提交订单</button>
+            <button class="confirm-btn" style="background-color: #636363" @click="cancelOrder">一键取消</button>
+            <button class="confirm-btn" @click="closeEdit">返回</button>
+        </div>
         <div v-if="showSelect" class="select-mask" @click="closeSelect">
             <div class="goods-list">
                 <div v-for="item in selectList" class="goods-list-item" :class="{active: item.solicitGoodsId === currentGoods.solicitGoodsId}" @click="chooseGoods(item)">

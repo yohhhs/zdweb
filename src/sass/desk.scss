@@ -96,3 +96,11 @@
     }
   }
 }
+.btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.confirm-btn {
+  width: calc(33.3333% - 10px);
+  line-height: 38px;
+}
