@@ -1,6 +1,8 @@
 @import 'base/reset.scss';
 //@import 'base/px2rem.scss';
-
+[v-cloak] {
+  display: none !important;
+}
 .container {
   padding: 15px 30px;
   position: fixed;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>征订订单管理</title>
+    <title>我的订单</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/edit.css">
     <link rel="stylesheet" href="css/message.css">
@@ -17,7 +17,7 @@
     <div class="gift-list-wrapper">
         <div class="wrapper">
             <ul class="gift-list">
-                <li v-for="(item, index) in orderList" class="list-item">
+                <li v-cloak v-for="(item, index) in orderList" class="list-item">
                     <div v-if="item.solicitState === 3 || item.orderState === 9" class="item-mask"></div>
                     <div class="list-title">
                         <p class="item-date">创建日期：{{item.createTime}}</p>
@@ -68,7 +68,8 @@
             </ul>
         </div>
     </div>
-    <div v-if="editMessage" class="message-mask">
+    <div class="no-order" v-cloak v-if="orderList.length === 0">暂无订单信息</div>
+    <div v-cloak v-if="editMessage" class="message-mask">
         <div class="message-wrapper">
             <div class="message-header">
                 <img src="./img/logo.png" alt="">
@@ -83,7 +84,7 @@
             <p class="message-tip">如有疑问请咨询内勤</p>
         </div>
     </div>
-    <div v-if="cancelMessage" class="message-mask">
+    <div v-cloak v-if="cancelMessage" class="message-mask">
         <div class="message-wrapper">
             <div class="message-header">
                 <img src="./img/logo.png" alt="">
@@ -98,7 +99,7 @@
             <p class="message-tip">请点击首页<span style="color: #44b549">我要征订</span></p>
         </div>
     </div>
-    <div v-if="isWrite" class="container">
+    <div v-cloak v-if="isWrite" class="container">
         <p class="label mb5">邀请码</p>
         <input v-model="questData.inviteCode" class="input-item mb10" type="text">
         <div class="area-wrapper">
@@ -141,7 +142,7 @@
         </div>
         <div v-if="showSelect" class="select-mask" @click="closeSelect">
             <div class="goods-list">
-                <div v-for="item in selectList" class="goods-list-item" :class="{active: item.solicitGoodsId === currentGoods.solicitGoodsId}" @click="chooseGoods(item)">
+                <div v-if="item.solicitState === 2" v-for="item in selectList" class="goods-list-item" :class="{active: item.solicitGoodsId === currentGoods.solicitGoodsId}" @click="chooseGoods(item)">
                     <img src="./img/confirm.png">
                     <p>{{item.goodsName}}</p>
                 </div>

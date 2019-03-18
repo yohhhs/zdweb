@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>征订信息录入</title>
+    <title>我要征订</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/edit.css">
@@ -12,15 +12,15 @@
 <div id="app">
     <div class="container">
         <p class="label mb5">邀请码</p>
-        <input v-model="questData.inviteCode" class="input-item mb10" type="text">
+        <input v-model="questData.inviteCode" class="input-item mb10" type="text" placeholder="例：TPSCGH（太平四川高新）">
         <div class="area-wrapper">
             <div class="area-item">
                 <p class="label mb5">营业区</p>
-                <input v-model="questData.saleDistrict" class="input-item" type="text">
+                <input v-model="questData.saleDistrict" class="input-item" type="text" placeholder="例：五区">
             </div>
             <div class="area-item">
                 <p class="label mb5">部门</p>
-                <input v-model="questData.department" class="input-item" type="text">
+                <input v-model="questData.department" class="input-item" type="text" placeholder="例：阳光部">
             </div>
         </div>
         <div class="flex-item">
@@ -49,13 +49,13 @@
         <button class="confirm-btn" @click="addOrder">提交订单</button>
         <div v-if="showSelect" class="select-mask" @click="closeSelect">
             <div class="goods-list">
-                <div v-for="item in selectList" class="goods-list-item" :class="{active: item.solicitGoodsId === currentGoods.solicitGoodsId}" @click="chooseGoods(item)">
+                <div v-if="item.solicitState === 2" v-for="item in selectList" class="goods-list-item" :class="{active: item.solicitGoodsId === currentGoods.solicitGoodsId}" @click="chooseGoods(item)">
                     <img src="./img/confirm.png">
                     <p>{{item.goodsName}}</p>
                 </div>
             </div>
         </div>
-        <div v-if="showMessage" class="message-mask">
+        <div v-cloak v-if="showMessage" class="message-mask">
             <div class="message-wrapper">
                 <div class="message-header">
                     <img src="./img/logo.png" alt="">

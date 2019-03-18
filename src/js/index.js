@@ -78,9 +78,15 @@ new Vue({
                 inviteCode: vm.questData.inviteCode
             }, function (res) {
                 if (res.statusCode === 200) {
-                    vm.selectList = res.data
+                    let ary = []
+                    res.data.forEach(item => {
+                        if (item.solicitState === 2) {
+                            ary.push(item)
+                        }
+                    }) 
+                    vm.selectList = ary
                     if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
-                        vm.currentGoods = res.data[0]
+                        vm.currentGoods = vm.selectList[0]
                     }
                 }
             })

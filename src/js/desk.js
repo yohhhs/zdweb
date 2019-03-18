@@ -31,6 +31,16 @@ new Vue({
         editMessage: false,
         cancelMessage: false
     },
+    watch: {
+        ['questData.inviteCode']: function (val) {
+            if (this.timer) {
+                clearTimeout(this.timer)
+                this.timer = setTimeout(this.getGoodsInfo, 1000)
+            } else {
+                this.timer = setTimeout(this.getGoodsInfo, 1000)
+            }
+        }
+    },
     created: function () {
         var self = this
         if (this.GetQueryString('code')) {
@@ -58,9 +68,15 @@ new Vue({
                 inviteCode: vm.questData.inviteCode
             }, function (res) {
                 if (res.statusCode === 200) {
-                    vm.selectList = res.data
+                    let ary = []
+                    res.data.forEach(item => {
+                        if (item.solicitState === 2) {
+                            ary.push(item)
+                        }
+                    })
+                    vm.selectList = ary
                     if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
-                        vm.currentGoods = res.data[0]
+                        vm.currentGoods = vm.selectList[0]
                     }
                 }
             })
@@ -111,8 +127,10 @@ new Vue({
             }, function (res) {
                 if (res.statusCode === 200) {
                     vm.editMessage = true
+                    vm.getOrderList()
                     setTimeout(function(){
                         vm.editMessage = false
+                        vm.isWrite = false
                     }, 1500)
                 }
             })
@@ -182,7 +200,6 @@ new Vue({
                 }
             })
         },
-        cancelOrder: function () {},
         closeEdit: function () {
             this.isWrite = false
         },
@@ -202,12 +219,16 @@ new Vue({
                     for (var k in vm.questData) {
                         vm.questData[k] = res.data[k]
                     }
-                    this.selectList = res.data.solicitGoodsList
-                    res.data.solicitGoodsList.forEach(function(item) {
-                        if (item.solicitGoodsId === res.data.solicitGoodsId) {
-                            this.currentGoods = item
+                    let ary = []
+                    res.data.solicitGoodsList.forEach(item => {
+                        if (item.solicitState === 2) {
+                            ary.push(item)
                         }
                     })
+                    vm.selectList = ary
+                    if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
+                        vm.currentGoods = vm.selectList[0]
+                    }
                 }
             })
         },
@@ -284,8 +305,10 @@ new Vue({
                 if (result.statusCode === 200) {
                     vm.orderList.splice(vm.currentIndex, 1)
                     vm.cancelMessage = true
+                    vm.getOrderList()
                     setTimeout(function(){
                         vm.cancelMessage = false
+                        vm.isWrite = false
                     }, 1500)
                 } else {
                     layer.open({

@@ -104,3 +104,25 @@
   width: calc(33.3333% - 10px);
   line-height: 38px;
 }
+.footer-text {
+  line-height: 45px;
+  text-align: center;
+  font-size: 14px;
+  color: #636363;
+}
+.no-order {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+}
+.zi {
+  z-index: 999;
+}
