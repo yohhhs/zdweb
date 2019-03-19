@@ -36,11 +36,16 @@
             <p class="label">电话</p>
             <input v-model="questData.mobile" class="input-item" type="text">
         </div>
-        <div v-if="currentGoods" class="good-content">
+        <div v-if="currentGoods" v-cloak class="good-content">
             <p class="label text-center mb10">征订行辅</p>
             <div class="goods-name" @click="openSelect">{{currentGoods.goodsName}}</div>
             <p class="time-tip text-center">距征订结束仅剩</p>
-            <p class="time text-center">{{countDown[0}}天{{countDown[0}}时{{countDown[0}}分{{countDown[0}}秒</p>
+            <p class="time-wrapper">
+                <span class="time-number">{{countDown[0]}}</span>天
+                <span class="time-number">{{countDown[1]}}</span>时
+                <span class="time-number">{{countDown[2]}}</span>分
+                <span class="time-number">{{countDown[3]}}</span>秒
+            </p>
             <div class="goods-img">
                 <img :src="currentGoods.goodsImage">
             </div>

@@ -89,10 +89,6 @@
     color: red;
     font-size: 16px;
   }
-  .time {
-    font-size: 16px;
-    color: #EF8642;
-  }
 }
 .count-number-wrapper {
   margin-bottom: 20px;
@@ -125,4 +121,29 @@
   font-size: 16px;
   border: none;
   outline: none;
+}
+.time-wrapper {
+  font-size: 14px;
+  color: #333;
+  display: inline-flex;
+  align-items: flex-end;
+  .time-number {
+    margin: 0 2px;
+    display: inline-block;
+    font-size: 16px;
+    color: #fff;
+    width: 28px;
+    line-height: 28px;
+    text-align: center;
+    background-color: red;
+  }
+  &.small {
+    font-size: 12px;
+    .time-number {
+      margin: 0 1px 0 0;
+      font-size: 14px;
+      width: 20px;
+      line-height: 20px;
+    }
+  }
 }

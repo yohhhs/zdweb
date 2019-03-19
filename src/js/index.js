@@ -67,8 +67,16 @@ new Vue({
                 var hour = parseInt((distance / (60 * 60 * 1000)) % 24)
                 var minu = parseInt((distance / (60 * 1000)) % 60)
                 var sec = parseInt((distance / 1000) % 60)
-                vm.countDown = [day, hour, minu, sec]
-                setTimeout(setTime, 1000)
+                vm.countDown = [day, vm.dealTimeStr(hour), vm.dealTimeStr(minu), vm.dealTimeStr(sec)]
+                setTimeout(vm.setTime, 1000)
+            }
+        },
+        dealTimeStr: function (time) {
+            var time = time + ''
+            if (time.length === 1) {
+                return '0' + time
+            } else {
+                return time
             }
         },
         getLastGoodsInfo: function () {
@@ -105,6 +113,7 @@ new Vue({
                     vm.selectList = ary
                     if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
                         vm.currentGoods = vm.selectList[0]
+                        vm.setTime()
                     }
                 }
             })

@@ -7,7 +7,14 @@ Vue.component('count-time', {
             countDown: [0, 0, 0, 0]
         }
     },
-    template: '<p>{{countDown[0]}}天{{countDown[1]}}时{{countDown[2]}}分{{countDown[3]}}秒</p>',
+    template: '<div class="time-wrapper small"><span class="time-number">{{countDown[0]}}</span>天'+
+    '<span class="time-number">{{countDown[1]}}</span>时'+
+    '<span class="time-number">{{countDown[2]}}</span>分'+
+    '<span class="time-number">{{countDown[3]}}</span>秒</div>',
+    created: function () {
+        console.log(this.endTime)
+        this.setTime()
+    },
     methods: {
         setTime: function () {
             var vm = this
@@ -21,8 +28,16 @@ Vue.component('count-time', {
                 var hour = parseInt((distance / (60 * 60 * 1000)) % 24)
                 var minu = parseInt((distance / (60 * 1000)) % 60)
                 var sec = parseInt((distance / 1000) % 60)
-                vm.countDown = [day, hour, minu, sec]
-                vm.timer = setTimeout(setTime, 1000)
+                vm.countDown = [day, vm.dealTimeStr(hour), vm.dealTimeStr(minu), vm.dealTimeStr(sec)]
+                vm.timer = setTimeout(vm.setTime, 1000)
+            }
+        },
+        dealTimeStr: function (time) {
+            var time = time + ''
+            if (time.length === 1) {
+                return '0' + time
+            } else {
+                return time
             }
         }
     },
@@ -61,10 +76,13 @@ new Vue({
         currentDetail: null,
         isWrite: false,
         editMessage: false,
-        cancelMessage: false
+        cancelMessage: false,
+        countDown: [0, 0, 0, 0],
+        countTimer: null,
+        isOpenWrite: false
     },
     watch: {
-        ['questData.inviteCode']: function (val) {
+        ['questData.inviteCode']: function (val, oldVal) {
             if (this.timer) {
                 clearTimeout(this.timer)
                 this.timer = setTimeout(this.getGoodsInfo, 1000)
@@ -94,6 +112,30 @@ new Vue({
         }
     },
     methods: {
+        setTime: function () {
+            var vm = this
+            var nowTime = new Date().getTime()
+            var endTime = new Date(vm.currentGoods.endTime).getTime()
+            var distance = endTime - nowTime
+            if (distance <= 0) {
+                vm.countDown = [0, 0, 0, 0]
+            } else {
+                var day = parseInt(distance / (60 * 60 * 24 * 1000))
+                var hour = parseInt((distance / (60 * 60 * 1000)) % 24)
+                var minu = parseInt((distance / (60 * 1000)) % 60)
+                var sec = parseInt((distance / 1000) % 60)
+                vm.countDown = [day, vm.dealTimeStr(hour), vm.dealTimeStr(minu), vm.dealTimeStr(sec)]
+                vm.countTimer = setTimeout(vm.setTime, 1000)
+            }
+        },
+        dealTimeStr: function (time) {
+            var time = time + ''
+            if (time.length === 1) {
+                return '0' + time
+            } else {
+                return time
+            }
+        },
         getGoodsInfo: function () {
             var vm = this
             $.post(URL + '/purchaseOrder/getSolicitGoodsByInviteCode', {
@@ -107,8 +149,20 @@ new Vue({
                         }
                     })
                     vm.selectList = ary
-                    if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
-                        vm.currentGoods = vm.selectList[0]
+                    if (vm.selectList && vm.selectList.length > 0) {
+                        vm.selectList.forEach(function(item){
+                            if (item.solicitGoodsId === vm.currentDetail.solicitGoodsId) {
+                                vm.currentGoods = item
+                            }
+                        })
+                        if (!vm.currentGoods) {
+                            vm.currentGoods = vm.selectList[0]
+                        }
+                        if (vm.countTimer) {
+                            clearTimeout(vm.countTimer)
+                            vm.countTimer = null
+                        }
+                        vm.setTime()
                     }
                 }
             })
@@ -159,10 +213,13 @@ new Vue({
             }, function (res) {
                 if (res.statusCode === 200) {
                     vm.editMessage = true
+                    vm.pageNo = 1
                     vm.getOrderList()
                     setTimeout(function(){
                         vm.editMessage = false
                         vm.isWrite = false
+                        clearTimeout(this.countTimer)
+                        this.countTimer = null
                     }, 1500)
                 }
             })
@@ -234,6 +291,8 @@ new Vue({
         },
         closeEdit: function () {
             this.isWrite = false
+            clearTimeout(this.countTimer)
+            this.countTimer = null
         },
         changeOrder: function (index) {
             this.currentDetail = JSON.parse(JSON.stringify(this.orderList[index]))
@@ -248,6 +307,7 @@ new Vue({
                 purchaseOrderId: this.currentDetail.purchaseOrderId
             }, function (res) {
                 if (res.statusCode === 200) {
+                    vm.currentDetail.solicitGoodsId = res.data.solicitGoodsId
                     for (var k in vm.questData) {
                         vm.questData[k] = res.data[k]
                     }
@@ -258,8 +318,16 @@ new Vue({
                         }
                     })
                     vm.selectList = ary
-                    if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
-                        vm.currentGoods = vm.selectList[0]
+                    if (vm.selectList && vm.selectList.length > 0) {
+                        vm.selectList.forEach(function(item){
+                            if (item.solicitGoodsId === vm.currentDetail.solicitGoodsId) {
+                                vm.currentGoods = item
+                            }
+                        })
+                        if (!vm.currentGoods) {
+                            vm.currentGoods = vm.selectList[0]
+                        }
+                        vm.setTime()
                     }
                 }
             })
@@ -327,6 +395,8 @@ new Vue({
         },
         pageBack: function () {
             this.isWrite = false
+            clearTimeout(this.countTimer)
+            this.countTimer = null
         },
         cancelOrder: function () {
             var vm = this
@@ -337,10 +407,13 @@ new Vue({
                 if (result.statusCode === 200) {
                     vm.orderList.splice(vm.currentIndex, 1)
                     vm.cancelMessage = true
+                    vm.pageNo = 1
                     vm.getOrderList()
                     setTimeout(function(){
                         vm.cancelMessage = false
                         vm.isWrite = false
+                        clearTimeout(this.countTimer)
+                        this.countTimer = null
                     }, 1500)
                 } else {
                     layer.open({
