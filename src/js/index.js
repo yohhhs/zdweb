@@ -21,7 +21,8 @@ new Vue({
             name: '',
             mobile: ''
         },
-        timer: null
+        timer: null,
+        countDown: [0, 0, 0, 0]
     },
     watch: {
         ['questData.inviteCode']: function (val) {
@@ -54,6 +55,22 @@ new Vue({
         }
     },
     methods: {
+        setTime: function () {
+            var vm = this
+            var nowTime = new Date().getTime()
+            var endTime = new Date(vm.currentGoods.endTime).getTime()
+            var distance = endTime - nowTime
+            if (distance <= 0) {
+                vm.countDown = [0, 0, 0, 0]
+            } else {
+                var day = parseInt(distance / (60 * 60 * 24 * 1000))
+                var hour = parseInt((distance / (60 * 60 * 1000)) % 24)
+                var minu = parseInt((distance / (60 * 1000)) % 60)
+                var sec = parseInt((distance / 1000) % 60)
+                vm.countDown = [day, hour, minu, sec]
+                setTimeout(setTime, 1000)
+            }
+        },
         getLastGoodsInfo: function () {
             let vm = this
             $.post(URL + '/purchaseOrder/getPurchaseOrderDetail', {
@@ -67,6 +84,7 @@ new Vue({
                     res.data.solicitGoodsList.forEach(function(item) {
                         if (item.solicitGoodsId === res.data.solicitGoodsId) {
                             vm.currentGoods = item
+                            vm.setTime()
                         }
                     })
                 }
@@ -83,7 +101,7 @@ new Vue({
                         if (item.solicitState === 2) {
                             ary.push(item)
                         }
-                    }) 
+                    })
                     vm.selectList = ary
                     if (vm.selectList && vm.selectList.length > 0 && !vm.currentGoods) {
                         vm.currentGoods = vm.selectList[0]

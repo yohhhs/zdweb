@@ -1,4 +1,36 @@
 var URL = 'https://www.topasst.com/solicitWeb'
+Vue.component('count-time', {
+    props: ['endTime'],
+    data: function () {
+        return {
+            timer: null,
+            countDown: [0, 0, 0, 0]
+        }
+    },
+    template: '<p>{{countDown[0]}}天{{countDown[1]}}时{{countDown[2]}}分{{countDown[3]}}秒</p>',
+    methods: {
+        setTime: function () {
+            var vm = this
+            var nowTime = new Date().getTime()
+            var endTime = new Date(vm.endTime).getTime()
+            var distance = endTime - nowTime
+            if (distance <= 0) {
+                vm.countDown = [0, 0, 0, 0]
+            } else {
+                var day = parseInt(distance / (60 * 60 * 24 * 1000))
+                var hour = parseInt((distance / (60 * 60 * 1000)) % 24)
+                var minu = parseInt((distance / (60 * 1000)) % 60)
+                var sec = parseInt((distance / 1000) % 60)
+                vm.countDown = [day, hour, minu, sec]
+                vm.timer = setTimeout(setTime, 1000)
+            }
+        }
+    },
+    destroyed: function () {
+        clearTimeout(this.timer)
+        this.timer = null
+    }
+})
 new Vue({
     el: '#app',
     data: {
