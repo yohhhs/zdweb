@@ -55,17 +55,17 @@
 }
 .good-content {
   margin: 10px 0;
-  padding-top: 15px;
+  padding-top: 5px;
   position: relative;
-  padding-right: 160px;
-  height: 150px;
+  padding-right: 140px;
+  height: 130px;
   overflow: hidden;
   .goods-img {
     position: absolute;
     top: 0;
     right: 0;
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,17 +77,17 @@
     }
   }
   .goods-name {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 25px;
     padding-right: 25px;
     background: url('../img/arrow.png') no-repeat bottom right / 24px 25px #fff;
   }
   .time-tip {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: red;
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 .count-number-wrapper {
@@ -128,12 +128,12 @@
   display: inline-flex;
   align-items: flex-end;
   .time-number {
-    margin: 0 2px;
+    margin: 0 1px;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
-    width: 28px;
-    line-height: 28px;
+    width: 20px;
+    line-height: 20px;
     text-align: center;
     background-color: red;
   }
