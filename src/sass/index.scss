@@ -71,6 +71,7 @@
     align-items: center;
     border-radius: 5px;
     background-color: #fff;
+    overflow: hidden;
     img {
       max-height: 100%;
       max-width: 100%;
@@ -121,6 +122,10 @@
   font-size: 16px;
   border: none;
   outline: none;
+}
+.flex-center {
+  width: 100%;
+  justify-content: center;
 }
 .time-wrapper {
   font-size: 14px;

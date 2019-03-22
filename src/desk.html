@@ -34,7 +34,7 @@
                         <p class="order-name">{{item.goodsName}}</p>
                         <p class="order-number">数量：{{item.goodsCount}}{{item.standard}}</p>
                         <div v-if="item.solicitState !== 3 && item.orderState !== 9">
-                            <p class="tip">距征订结束：<count-time :end-time="item.endTime"></count-time></p>
+                            <p class="tip">距征订结束:<count-time :end-time="item.endTime"></count-time></p>
                             <div class="item-btn" @click="changeOrder(index)">修改订单</div>
                         </div>
                         <div v-if="item.orderState === 9">
@@ -130,7 +130,7 @@
             <p class="label text-center mb10">征订行辅</p>
             <div class="goods-name" @click="openSelect">{{currentGoods.goodsName}}</div>
             <p class="time-tip text-center">征订结束时间</p>
-            <p class="time-wrapper">
+            <p class="time-wrapper flex-center" style="margin: 0 auto">
                 <span class="time-number">{{countDown[0]}}</span>天
                 <span class="time-number">{{countDown[1]}}</span>时
                 <span class="time-number">{{countDown[2]}}</span>分
