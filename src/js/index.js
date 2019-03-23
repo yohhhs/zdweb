@@ -58,7 +58,7 @@ new Vue({
         setTime: function () {
             var vm = this
             var nowTime = new Date().getTime()
-            var endTime = new Date(vm.currentGoods.endTime).getTime()
+            var endTime = new Date(vm.currentGoods.endTime.replace(/-/g,'/')).getTime()
             var distance = endTime - nowTime
             if (distance <= 0) {
                 vm.countDown = [0, 0, 0, 0]
@@ -164,9 +164,9 @@ new Vue({
             }, function (res) {
                 if (res.statusCode === 200) {
                     vm.showMessage = true
-                    setTimeout(function(){
+                    /*setTimeout(function(){
                         vm.showMessage = false
-                    }, 1500)
+                    }, 1500)*/
                 }
             })
         },

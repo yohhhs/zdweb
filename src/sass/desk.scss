@@ -106,6 +106,9 @@
 .confirm-btn {
   width: calc(33.3333% - 10px);
   line-height: 38px;
+  &.large {
+
+  }
 }
 .footer-text {
   line-height: 45px;

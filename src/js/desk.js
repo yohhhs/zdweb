@@ -19,7 +19,7 @@ Vue.component('count-time', {
         setTime: function () {
             var vm = this
             var nowTime = new Date().getTime()
-            var endTime = new Date(vm.endTime).getTime()
+            var endTime = new Date(vm.endTime.replace(/-/g,'/')).getTime()
             var distance = endTime - nowTime
             if (distance <= 0) {
                 vm.countDown = [0, 0, 0, 0]
@@ -115,7 +115,7 @@ new Vue({
         setTime: function () {
             var vm = this
             var nowTime = new Date().getTime()
-            var endTime = new Date(vm.currentGoods.endTime).getTime()
+            var endTime = new Date(vm.currentGoods.endTime.replace(/-/g,'/')).getTime()
             var distance = endTime - nowTime
             if (distance <= 0) {
                 vm.countDown = [0, 0, 0, 0]
@@ -215,12 +215,12 @@ new Vue({
                     vm.editMessage = true
                     vm.pageNo = 1
                     vm.getOrderList()
-                    setTimeout(function(){
+                    /*setTimeout(function(){
                         vm.editMessage = false
                         vm.isWrite = false
                         clearTimeout(this.countTimer)
                         this.countTimer = null
-                    }, 1500)
+                    }, 1500)*/
                 }
             })
         },
@@ -409,12 +409,12 @@ new Vue({
                     vm.cancelMessage = true
                     vm.pageNo = 1
                     vm.getOrderList()
-                    setTimeout(function(){
+                    /*setTimeout(function(){
                         vm.cancelMessage = false
                         vm.isWrite = false
                         clearTimeout(this.countTimer)
                         this.countTimer = null
-                    }, 1500)
+                    }, 1500)*/
                 } else {
                     layer.open({
                         content: result.msg,

@@ -27,7 +27,7 @@
                         <p v-if="item.orderState === 1 && item.solicitState === 2" class="item-status1">订单进行中</p>
                         <p v-if="item.orderState === 1 && item.solicitState === 3" class="item-status2">订单已完成</p>
                     </div>
-                    <div class="item-content">
+                    <div class="item-content"  @click="changeOrder(index)">
                         <div class="img-wrapper">
                             <img :src="item.goodsImage ">
                         </div>
@@ -35,7 +35,7 @@
                         <p class="order-number">数量：{{item.goodsCount}}{{item.standard}}</p>
                         <div v-if="item.solicitState !== 3 && item.orderState !== 9">
                             <p class="tip">距征订结束：<count-time :end-time="item.endTime"></count-time></p>
-                            <div class="item-btn" @click="changeOrder(index)">修改订单</div>
+                            <div class="item-btn">修改订单</div>
                         </div>
                         <div v-if="item.orderState === 9">
                             <p class="tip">征订已取消</p>
@@ -107,28 +107,29 @@
     </div>
     <div v-cloak v-if="isWrite" class="container">
         <p class="label mb5">邀请码</p>
-        <input v-model="questData.inviteCode" class="input-item mb10" type="text">
+        <input v-model="questData.inviteCode" class="input-item mb10" type="text" disabled>
         <div class="area-wrapper">
             <div class="area-item">
                 <p class="label mb5">营业区</p>
-                <input v-model="questData.saleDistrict" class="input-item" type="text">
+                <input v-model="questData.saleDistrict" class="input-item" type="text" disabled>
             </div>
             <div class="area-item">
                 <p class="label mb5">部门</p>
-                <input v-model="questData.department" class="input-item" type="text">
+                <input v-model="questData.department" class="input-item" type="text" disabled>
             </div>
         </div>
         <div class="flex-item">
             <p class="label">姓名</p>
-            <input v-model="questData.name" class="input-item" type="text">
+            <input v-model="questData.name" class="input-item" type="text" disabled>
         </div>
         <div class="flex-item">
             <p class="label">电话</p>
-            <input v-model="questData.mobile" class="input-item" type="text">
+            <input v-model="questData.mobile" class="input-item" type="number" maxlength="11">
         </div>
         <div v-if="currentGoods" class="good-content">
             <p class="label text-center mb10">征订行辅</p>
-            <div class="goods-name" @click="openSelect">{{currentGoods.goodsName}}</div>
+            <div class="goods-name">{{currentGoods.goodsName}}</div>
+            <!--<div class="goods-name" @click="openSelect">{{currentGoods.goodsName}}</div>-->
             <p class="time-tip text-center">征订结束时间</p>
             <p class="time-wrapper">
                 <span class="time-number">{{countDown[0]}}</span>天
@@ -149,7 +150,7 @@
         <div class="btn-wrapper">
             <button class="confirm-btn" @click="addOrder">提交订单</button>
             <button class="confirm-btn" style="background-color: #636363" @click="cancelOrder">一键取消</button>
-            <button class="confirm-btn" @click="closeEdit">返回</button>
+            <!--<button class="confirm-btn" @click="closeEdit">返回</button>-->
         </div>
         <div v-if="showSelect" class="select-mask" @click="closeSelect">
             <div class="goods-list">
