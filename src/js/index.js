@@ -85,16 +85,18 @@ new Vue({
                 memberId: vm.memberId
             }, function (res) {
                 if (res.statusCode === 200) {
-                    for (var k in vm.questData) {
-                        vm.questData[k] = res.data[k]
-                    }
-                    vm.selectList = res.data.solicitGoodsList
-                    res.data.solicitGoodsList.forEach(function(item) {
-                        if (item.solicitGoodsId === res.data.solicitGoodsId) {
-                            vm.currentGoods = item
-                            vm.setTime()
+                    if (res.data) {
+                        for (var k in vm.questData) {
+                            vm.questData[k] = res.data[k]
                         }
-                    })
+                        vm.selectList = res.data.solicitGoodsList
+                        res.data.solicitGoodsList.forEach(function(item) {
+                            if (item.solicitGoodsId === res.data.solicitGoodsId) {
+                                vm.currentGoods = item
+                                vm.setTime()
+                            }
+                        })
+                    }
                 }
             })
         },
@@ -160,7 +162,8 @@ new Vue({
                 department: vm.questData.department,
                 name: vm.questData.name,
                 mobile: vm.questData.mobile,
-                solicitGoodsId: vm.currentGoods.solicitGoodsId
+                solicitGoodsId: vm.currentGoods.solicitGoodsId,
+                orderType: 1
             }, function (res) {
                 if (res.statusCode === 200) {
                     vm.showMessage = true

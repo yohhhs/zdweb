@@ -209,7 +209,8 @@ new Vue({
                 department: vm.questData.department,
                 name: vm.questData.name,
                 mobile: vm.questData.mobile,
-                solicitGoodsId: vm.currentGoods.solicitGoodsId
+                solicitGoodsId: vm.currentGoods.solicitGoodsId,
+                orderType: 2
             }, function (res) {
                 if (res.statusCode === 200) {
                     vm.editMessage = true
