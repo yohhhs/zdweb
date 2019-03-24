@@ -79,7 +79,8 @@ new Vue({
         cancelMessage: false,
         countDown: [0, 0, 0, 0],
         countTimer: null,
-        isOpenWrite: false
+        isOpenWrite: false,
+        otherInfo: ''
     },
     watch: {
         ['questData.inviteCode']: function (val, oldVal) {
@@ -112,6 +113,16 @@ new Vue({
         }
     },
     methods: {
+        getGoodsOtherInfo: function () {
+            var vm = this
+            $.post(URL + '/purchaseOrder/getOtherInfoByInviteCode', {
+                inviteCode: vm.questData.inviteCode
+            }, function (res) {
+                if (res.statusCode === 200) {
+                    vm.otherInfo = res.data
+                }
+            })
+        },
         setTime: function () {
             var vm = this
             var nowTime = new Date().getTime()
@@ -200,6 +211,9 @@ new Vue({
             }
             if (vm.questData.mobile === '') {
                 return alert('请输入电话')
+            }
+            if (!/^[1][3,4,5,7,8,9][0-9]{9}$/.test(vm.questData.mobile)) {
+                return alert('请输入正确手机号')
             }
             $.post(URL + '/purchaseOrder/addPurchaseOrder', {
                 memberId: vm.memberId,
@@ -330,6 +344,7 @@ new Vue({
                         }
                         vm.setTime()
                     }
+                    vm.getGoodsOtherInfo()
                 }
             })
         },

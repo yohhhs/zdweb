@@ -21,16 +21,24 @@ new Vue({
             name: '',
             mobile: ''
         },
-        timer: null,
+        timer1: null,
+        timer2: null,
+        otherInfo: '',
         countDown: [0, 0, 0, 0]
     },
     watch: {
         ['questData.inviteCode']: function (val) {
-            if (this.timer) {
-                clearTimeout(this.timer)
-                this.timer = setTimeout(this.getGoodsInfo, 1000)
+            if (this.timer1) {
+                clearTimeout(this.timer1)
+                this.timer1 = setTimeout(this.getGoodsInfo, 1000)
             } else {
-                this.timer = setTimeout(this.getGoodsInfo, 1000)
+                this.timer1 = setTimeout(this.getGoodsInfo, 1000)
+            }
+            if (this.timer2) {
+                clearTimeout(this.timer2)
+                this.timer2 = setTimeout(this.getGoodsOtherInfo, 1000)
+            } else {
+                this.timer2 = setTimeout(this.getGoodsOtherInfo, 1000)
             }
         }
     },
@@ -96,7 +104,18 @@ new Vue({
                                 vm.setTime()
                             }
                         })
+                        vm.getGoodsOtherInfo()
                     }
+                }
+            })
+        },
+        getGoodsOtherInfo: function () {
+            var vm = this
+            $.post(URL + '/purchaseOrder/getOtherInfoByInviteCode', {
+                inviteCode: vm.questData.inviteCode
+            }, function (res) {
+                if (res.statusCode === 200) {
+                    vm.otherInfo = res.data
                 }
             })
         },
@@ -153,6 +172,9 @@ new Vue({
             }
             if (vm.questData.mobile === '') {
                 return alert('请输入电话')
+            }
+            if (!/^[1][3,4,5,7,8,9][0-9]{9}$/.test(vm.questData.mobile)) {
+                return alert('请输入正确手机号')
             }
             $.post(URL + '/purchaseOrder/addPurchaseOrder', {
                 memberId: vm.memberId,

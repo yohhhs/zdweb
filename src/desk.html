@@ -111,6 +111,7 @@
         </div>
     </div>
     <div v-cloak v-if="isWrite" class="container">
+        <div class="other-info">{{otherInfo}}</div>
         <p class="label mb5">邀请码</p>
         <input v-model="questData.inviteCode" class="input-item mb10" type="text" disabled>
         <div class="area-wrapper">
@@ -149,12 +150,12 @@
         <p class="label mb5 text-center">征订数量</p>
         <div class="count-number-wrapper">
             <img @click="delCount" class="number-handle del-btn" src="./img/del.png">
-            <input  v-model="questData.goodsCount" class="input-item" type="text">
+            <input  v-model="questData.goodsCount" class="input-item" type="number">
             <img @click="addCount" class="number-handle add-btn" src="./img/add.png" alt="">
         </div>
         <div class="btn-wrapper">
             <button class="confirm-btn large" @click="addOrder">提交订单</button>
-            <button class="confirm-btn" style="background-color: #636363" @click="cancelOrder">一键取消</button>
+            <button class="confirm-btn" style="background-color: #636363;width: 100px;margin-left: 10px" @click="cancelOrder">一键取消</button>
             <!--<button class="confirm-btn" @click="closeEdit">返回</button>-->
         </div>
         <div v-if="showSelect" class="select-mask" @click="closeSelect">
