@@ -2,7 +2,7 @@
 //@import 'base/px2rem.scss';
 
 .container {
-  padding: 15px 30px;
+  padding: 65px 30px 15px;
   position: fixed;
   left: 0;
   top: 0;
@@ -154,10 +154,13 @@
 }
 .other-info {
   width: 100%;
-  line-height: 50px;
+  line-height: 55px;
   text-align: center;
   overflow: hidden;
-  background-color: #ef8642;
+  background-color: #ef5017;
   color: #fff;
   font-size: 18px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
