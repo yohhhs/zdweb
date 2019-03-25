@@ -59,7 +59,8 @@ new Vue({
             saleDistrict: '',
             department: '',
             name: '',
-            mobile: ''
+            mobile: '',
+            purchaseOrderId: ''
         },
         timer: null,
         orderList: [],
@@ -223,6 +224,7 @@ new Vue({
                 department: vm.questData.department,
                 name: vm.questData.name,
                 mobile: vm.questData.mobile,
+                purchaseOrderId: vm.questData.purchaseOrderId,
                 solicitGoodsId: vm.currentGoods.solicitGoodsId,
                 orderType: 2
             }, function (res) {
